@@ -6,10 +6,10 @@ const bodyParser=require("body-parser");
 const router=express.Router();
 
 const connectionInfo={
-    host: "localhost",
-    user: "X",
-    password: "ASMSucks23@",
-    database: "storeDB",
+    host: "",
+    user: "",
+    password: "",
+    database: "",
 };
 
 const db= new DataBase();
