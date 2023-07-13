@@ -4,7 +4,7 @@ const formchecker = (function () {
 
 function check(form)
 {   
-    if(form===undefined || form===null)return;
+    if(form===undefined || form===null)return 1;
   
     const mailValidator=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -38,7 +38,7 @@ function check(form)
 
 function checkLogin(form)
 {   
-    if(form===undefined || form===null)return;
+    if(form===undefined || form===null)return 1;
 
     const mailValidator=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
