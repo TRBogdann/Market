@@ -1,0 +1,16 @@
+
+form
+{   
+    background-color: aquamarine;
+    display:flex;
+    flex-direction: column;
+}
+
+
+
+.mess
+ {
+    font-size:0.8rem;
+    white-space: pre-wrap;
+    color:red ;
+}
