@@ -9,10 +9,10 @@ const multer = require("multer");
 const router = express.Router();
 const db = new DataBase();
 const connectionInfo = {
-  host: "localhost",
-  user: "X",
-  password: "ASMSucks23@",
-  database: "storeDB",
+  host: "",
+  user: "",
+  password: "",
+  database: "",
 };
 
 db.createConnection(connectionInfo);
