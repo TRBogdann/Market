@@ -4,13 +4,20 @@ const formchecker = (function () {
 
 function check(form)
 {   
-    if(form===undefined || form===null)return;
+    if(form===undefined || form===null)return 1;
   
     const mailValidator=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     for (const [key, value] of Object.entries(form)) {
         if(value==="")return 1
     }
+    if(form.fname===undefined)return 1;
+    if(form.sname===undefined)return 1;
+    if(form.uname===undefined)return 1;
+    if(form.pass===undefined)return 1;
+    if(form.email===undefined)return 1;
+    if(form.phone===undefined)return 1;
+
 
     if(form.fname.length>80)return 2;
     if(form.sname.length>40)return 2;
@@ -38,14 +45,14 @@ function check(form)
 
 function checkLogin(form)
 {   
-    if(form===undefined || form===null)return;
+    if(form===undefined || form===null)return 1;
 
     const mailValidator=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     let type="email";
 
-    if(form.user==="")return 1;
-    if(form.password==="")return 1;
+    if(form.user===undefined || form.user==="")return 1;
+    if(form.password===undefined || form.password==="")return 1;
 
     if(form.user.length>80)return 2;
     if(form.password.length>200)return 2;

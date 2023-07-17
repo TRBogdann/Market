@@ -4,15 +4,16 @@ const express = require("express");
 const encryptor = require("./utils/encryptor");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+require('dotenv').config();
 
 
 const router = express.Router();
 const db = new DataBase();
 const connectionInfo = {
-  host: "localhost",
-  user: "X",
-  password: "ASMSucks23@",
-  database: "storeDB",
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
 };
 
 db.createConnection(connectionInfo);
@@ -40,20 +41,20 @@ router.post("/", async (req, res) => {
 
   let queryCode = 0;
 
-  const query = "SELECT id, username FROM customers";
+  const query = "SELECT id, username,email FROM customers";
   let result = await db.runQuery(query);
   let id = 0;
   
   for (let i = 0; i < result.length; i++) {
-    if (result[i].id > id) id = result[i].id + 1;
-    if (result[i].username === req.body.uname) {
+    if (result[i].id >= id) id = result[i].id + 1;
+    if (result[i].username === req.body.uname || result[i].email === req.body.email) {
       queryCode = 1;
       break;
     }
   }
 
   if (queryCode) {
-    res.send("Username exists");
+    res.send("Username or Email already exists");
     return;
   }
 

@@ -6,13 +6,14 @@ const multer = require("multer");
 const formChecker = require("./utils/formchecker");
 const session= require("express-session");
 const cookieParser= require("cookie-parser");
+require('dotenv').config();
 
 const router = express.Router();
 const connectionInfo = {
-  host: "localhost",
-  user: "X",
-  password: "ASMSucks23@",
-  database: "storeDB",
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
 };
 
 const db = new DataBase();

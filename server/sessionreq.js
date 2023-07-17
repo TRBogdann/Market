@@ -3,14 +3,15 @@ const express=require("express");
 const bodyParser=require("body-parser");
 const multer=require("multer");
 const DataBase=require("./utils/database");
+require('dotenv').config();
 
 
 const router = express.Router();
 const connectionInfo = {
-    host: "localhost",
-    user: "X",
-    password: "ASMSucks23@",
-    database: "storeDB",
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
   };
 
 const db = new DataBase();
