@@ -1,13 +1,12 @@
 const DataBase = require("./utils/database");
-const cypher= require("./utils/cypher");
+const cypher = require("./utils/cypher");
 const formChecker = require("./utils/formchecker");
-const sendEmail = require("./utils/email")
+const sendEmail = require("./utils/email");
 const express = require("express");
 const encryptor = require("./utils/encryptor");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-require('dotenv').config();
-
+require("dotenv").config();
 
 const router = express.Router();
 const db = new DataBase();
@@ -18,6 +17,7 @@ const connectionInfo = {
   database: process.env.DATABASE,
 };
 
+db.setText("SUSCRIPT : ");
 db.createConnection(connectionInfo);
 
 const upload = multer();
@@ -46,9 +46,11 @@ router.post("/", async (req, res) => {
   let query = "SELECT id, username,email FROM customers";
   let result = await db.runQuery(query);
 
-  
   for (let i = 0; i < result.length; i++) {
-     if (result[i].username === req.body.uname || result[i].email === req.body.email) {
+    if (
+      result[i].username === req.body.uname ||
+      result[i].email === req.body.email
+    ) {
       queryCode = 1;
       break;
     }
@@ -59,11 +61,14 @@ router.post("/", async (req, res) => {
     return;
   }
 
-  query = "SELECT username,email FROM requests_su"
+  query = "SELECT username,email FROM requests_su";
   result = await db.runQuery(query);
 
   for (let i = 0; i < result.length; i++) {
-    if (result[i].username === req.body.uname || result[i].email === req.body.email) {
+    if (
+      result[i].username === req.body.uname ||
+      result[i].email === req.body.email
+    ) {
       queryCode = 1;
       break;
     }
@@ -74,23 +79,21 @@ router.post("/", async (req, res) => {
     return;
   }
 
-
-
   let hash = await encryptor.hashPassword(req.body.pass);
   let token = cypher.genToken(30);
-  let date = new Date();
-  let dateStr =
-    date.getFullYear() + "/" + date.getMonth() + "/" + date.getDay();
-    
-  let hour=0;
-  if(date.getHours()!==23) hour=date.getHours()+1;
+  const date = new Date();
+  const dateStr =
+    date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
 
-  let expire=hour+":"+date.getMinutes();
+  let hour = 0;
+  if (date.getHours() !== 23) hour = date.getHours() + 1;
+
+  const expire = hour + ":" + date.getMinutes();
 
   let insertQuery = "INSERT INTO requests_su VALUES(";
 
   insertQuery +=
-    '"'+
+    '"' +
     req.body.fname +
     '","' +
     req.body.sname +
@@ -109,13 +112,13 @@ router.post("/", async (req, res) => {
     '","' +
     token +
     '","' +
-    expire+
+    expire +
     '")';
 
   result = await db.runQuery(insertQuery);
 
-  const url=process.env.BASE_URL+token;
-  sendEmail(req.body.email,"Validate Your Email",url);
+  const url = process.env.BASE_URL + token;
+  sendEmail(req.body.email, "Validate Your Email", url);
 
   res.send("Validate Email");
 });

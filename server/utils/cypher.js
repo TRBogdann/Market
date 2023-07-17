@@ -1,17 +1,14 @@
-
 const cypher = (function () {
-    const crypto=require("crypto");
+  const crypto = require("crypto");
 
-    function generateToken(size)
-    {
-        const token=crypto.randomBytes(size).toString("hex");
-        return token;
-    }
- 
-     return {
-        genToken:generateToken,
-     };
-   })();
+  function generateToken(size) {
+    const token = crypto.randomBytes(size).toString("hex");
+    return token;
+  }
 
-module.exports=cypher; 
- 
+  return {
+    genToken: generateToken,
+  };
+})();
+
+module.exports = cypher;

@@ -5,6 +5,7 @@ import React,{useState} from 'react';
 function SignUpForm()
 {
 
+    const [answare,setAnsware]=useState("");
     const [isValid,setIsValid]=useState(0);
     const [fdata,setFdata]=useState(
         {
@@ -212,7 +213,7 @@ function SignUpForm()
 
         request.onload=function ()
     {
-      console.log(request.responseText);
+      setAnsware(request.responseText);
       
     }
 
@@ -265,6 +266,7 @@ function SignUpForm()
     <div className="mess" >{message.cpass}</div>
     <input type="submit" value="Sign Up"/>
     </form>
+    {answare}
     </div>
     );
 }
