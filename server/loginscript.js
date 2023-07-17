@@ -83,10 +83,14 @@ router.post("/", async (req, res) => {
 
  query="SELECT id,username FROM customers WHERE "+type+"='"+req.body.user+"'"
  const userID= await db.runQuery(query);
+
+ const date=new Date();
+ let dateStr =
+ date.getFullYear() + "/" + date.getMonth() + "/" + date.getDay();
  
  query="INSERT INTO session VALUES(\""+
  req.sessionID+"\",\""+req.socket.remoteAddress+"\",\""+
- userID[0].username+"\","+userID[0].id+");";
+ userID[0].username+"\","+userID[0].id+",\""+dateStr+"\");";
 
 db.runQuery(query);
 

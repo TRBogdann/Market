@@ -4,7 +4,7 @@ const loginRouter=require("./loginscript.js");
 const signupRouter=require("./signup.js");
 const sessionRouter=require("./sessionreq.js");
 const logoutRouter=require("./logout.js");
-const emailRouter=require("./email.js");
+const emailRouter=require("./verifyemail.js");
 
 const cors = require("cors");
 const express=require("express");

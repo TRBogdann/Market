@@ -1,8 +1,7 @@
 const express=require("express");
 const DataBase=require("./utils/database");
 const multer=require("multer");
-const bodyParser=require("body-parser");
-require('dotenv').config();
+const bodyParser=require("body-parser");  
 
 const router=express.Router();
 
