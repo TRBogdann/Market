@@ -2,6 +2,7 @@
 import LogInForm from './pages/LogInForm';
 import SignUpForm from './pages/SignUpForm';
 import Home from './pages/Home';
+import Recover from './pages/Recover';
 
 function App() {
 
@@ -19,6 +20,10 @@ function App() {
    case "/login":
     currentPage=<LogInForm/>
       break;
+ 
+  case "/recovery":
+    currentPage=<Recover/>
+    break;
 
     default:
       currentPage=<Home/>;

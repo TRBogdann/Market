@@ -97,10 +97,9 @@ router.post("/", async (req, res) => {
   const dateStr =
     date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
 
-  let hour = 0;
-  if (date.getHours() !== 23) hour = date.getHours() + 1;
+  let hour = date.getHours();
 
-  const expire = hour + ":" + date.getMinutes();
+  const time = hour + ":" + date.getMinutes();
 
   let insertQuery = "INSERT INTO requests_su VALUES(";
 
@@ -124,7 +123,7 @@ router.post("/", async (req, res) => {
     '","' +
     token +
     '","' +
-    expire +
+    time +
     '")';
 
   try{
@@ -141,7 +140,7 @@ router.post("/", async (req, res) => {
   }
 
   const url = process.env.BASE_URL + token;
-  sendEmail(req.body.email, "Validate Your Email", url);
+  sendEmail(req.body.email, "Validate Your Email", url,"validation");
 
   res.send("Validate Email");
 });

@@ -19,7 +19,9 @@ function dateDiff(date1, date2) {
 
 setInterval(async () => {
   let countSession = 0;
-  let countRequest = 0;
+  let countValidationRequest = 0;
+  let countRecoveryRequest=0;
+
   const date = new Date();
 
   const query1 = "SELECT creation,id FROM session";
@@ -75,11 +77,47 @@ setInterval(async () => {
             return;
           }
         
-         countRequest++;
+         countValidationRequest++;
+      }
+    }
+  }
+
+  const query3 = "SELECT email,create_date,expire FROM requests_r";
+  result = await db.runQuery(query3);
+
+  if (result[0]) {
+    for (let i = 0; i < result.length; i++) {
+      const dateInfo = result[0].create_date;
+      const time = result[0].expire;
+      const dateStr =
+        dateInfo.getFullYear() +
+        "/" +
+        (dateInfo.getMonth() + 1) +
+        "/" +
+        dateInfo.getDate() +
+        " " +
+        time;
+      const date2 = new Date(dateStr);
+
+      if (dateDiff(date, date2) > 3600000) {
+        const deleteQuery =
+          'DELETE FROM requests_r WHERE username="' + result[i].email + '"';
+        
+          try{
+         db.runQuery(deleteQuery);
+          }
+          catch(error){
+            console.log("CLEANER : [ERROR: CLEANER couldn t delete request]")
+            console.log(error);
+            return;
+          }
+        
+         countRecoveryRequest++;
       }
     }
   }
 
   console.log("CLEANER : [" + countSession + " Sessions Deleted]");
-  console.log("CLEANER : [" + countRequest + " Sessions Deleted]");
+  console.log("CLEANER : [" + countValidationRequest + " Validation Requests Deleted]");
+  console.log("CLEANER : [" + countRecoveryRequest + " Recovery Requests Deleted]");
 }, 3600000);

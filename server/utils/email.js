@@ -1,7 +1,7 @@
 const mailer = require("nodemailer");
 require("dotenv").config();
 
-const sendMail = async (email, subject, text) => {
+const sendMail = async (email, subject, text ,type="") => {
   let connectionInfo = {
     host: process.env.EHOST,
     sevice: process.env.SERVICE,
@@ -23,7 +23,7 @@ const sendMail = async (email, subject, text) => {
       text: text,
     });
 
-    console.log("Email Sent");
+    console.log("A "+type+" email was sent to "+ email);
   } catch (error) {
     console.log(error);
   }

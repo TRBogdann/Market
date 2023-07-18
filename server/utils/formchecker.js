@@ -61,9 +61,23 @@ const formchecker = (function () {
     return type;
   }
 
+  function checkEmail(form){
+
+    if (form === undefined || form === null) return 1;
+    if (form.email === undefined || form.email === "") return 1;
+
+    const mailValidator = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (form.email.length > 80) return 2;
+    if (!mailValidator.test(form.email)) return 2;
+
+    return 0;
+  }
+
   return {
     checkForm: check,
     checkLoginForm: checkLogin,
+    checkEmail: checkEmail,
   };
 })();
 

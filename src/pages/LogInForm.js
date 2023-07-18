@@ -52,6 +52,7 @@ function LogInForm()
         <input type="password" className="password" onChange={(e)=>{setPassword(e.target.value)}} /> 
         <input type="submit" value="Log In"/>
       </form>
+      <a href="/recovery">Forgot Password</a>
       <div className="errorMessage">{message}</div>
       </>
     );
