@@ -28,14 +28,27 @@ router.post("/", async (req, res) => {
   }
 
   const query = "SELECT username FROM session WHERE id='" + req.body.id + "'";
+
+  try{
   const result = await db.runQuery(query);
+
   if (result) {
     if (result[0] === undefined || result[0] === null) {
       res.send("Bad request");
       return;
     }
+
     res.send(result[0].username);
   }
+
+}
+catch(error){
+
+  console.log("SESSION : [ERROR: Data for session "+req.body.id+" could not be accesed");
+  console.log(error);
+  res.send(500);
+}
+
 });
 
 module.exports = router;

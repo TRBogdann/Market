@@ -23,7 +23,21 @@ router.use(upload.none());
 
 router.post("/", async (req, res) => {
   const query = "DELETE FROM session WHERE id='" + req.body.id + "'";
+
+  try{
   db.runQuery(query);
+  }
+  catch(error)
+  {
+    console.log("LOGOUTSCRIPT : [User couldn t be logged out]");
+    console.log("LOGOUTSCRIPT : [Session token: ",req.body.id+"]");
+    console.log(error);
+    
+    res.sendStatus(500);
+    
+    return;
+  }
+
   res.sendStatus(200);
 });
 

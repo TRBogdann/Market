@@ -62,7 +62,19 @@ router.post("/", async (req, res) => {
   }
 
   query = "SELECT username,email FROM requests_su";
+
+  try{
   result = await db.runQuery(query);
+  }
+  catch(error)
+  {
+    console.log("SUSCRIPT : [ERROR: Requests couldn t be accesed]");
+    console.log(error);
+
+    res.send("Server Error");
+
+    return;
+  }
 
   for (let i = 0; i < result.length; i++) {
     if (
@@ -115,7 +127,18 @@ router.post("/", async (req, res) => {
     expire +
     '")';
 
+  try{
   result = await db.runQuery(insertQuery);
+  }
+  catch(error)
+  {
+    console.log("SUSCRIPT: [ERROR: request for could not be created]");
+    console.log(error);
+
+    res.send("Server Problems");
+
+    return;
+  }
 
   const url = process.env.BASE_URL + token;
   sendEmail(req.body.email, "Validate Your Email", url);

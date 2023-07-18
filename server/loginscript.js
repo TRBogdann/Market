@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
   let type = formChecker.checkLoginForm(req.body);
 
   if (type === 1) {
-    console.log("Data did not reach the server");
+    console.log("LOGINSCRIPT : [WARNING: Data did not reach the server]");
     res.send({
       text: "Unexpected problem happened.Please try again",
       status: 406,
@@ -51,13 +51,33 @@ router.post("/", async (req, res) => {
     return;
   }
   if (type === 2) {
-    console.log("Invalid data reached the server");
+    console.log("LOGINSCRIPT : [WARNING: Invalid data reached the server]");
     res.send({ text: "User or password are invalid", status: 400 });
     return;
   }
 
   let query = "SELECT passhash," + type + " FROM customers";
-  const result = await db.runQuery(query);
+  let result;
+  try{
+    result = await db.runQuery(query);
+  }
+  catch(error)
+  {
+    console.log("LOGINSCRIPT : [ERROR: Hash could not be accesed]");
+    console.log(error);
+
+    const failMessage=
+    {
+      text:"Internal Server Error.Try Again Later",
+      status:500
+    }
+
+    res.send(failMessage);
+
+    return;
+
+  }
+
   let hash = "";
 
   let found = 0;
@@ -90,7 +110,30 @@ router.post("/", async (req, res) => {
     "='" +
     req.body.user +
     "'";
-  const userID = await db.runQuery(query);
+
+  let userID;
+
+  try{
+    userID = await db.runQuery(query);
+  }
+  catch(error)
+  {
+    console.log("LOGINSCRIPT : [ERROR: UserID could not be accesed]");
+    console.log(error);
+
+    const failMessage=
+    {
+      text:"Internal Server Error.Try Again Later",
+      status:500
+    }
+
+    res.send(failMessage);
+
+    return;
+
+  }
+
+
 
   const date = new Date();
   const dateStr =
@@ -109,7 +152,25 @@ router.post("/", async (req, res) => {
     dateStr +
     '");';
 
+  try{
   db.runQuery(query);
+  }
+  catch(error)
+  {
+  console.log("LOGINSCRIPT: [ERROR: Session for "+userID[0].username+" could not be generated");
+  console.log(error);
+
+  const failMessage=
+    {
+      text:"Internal Server Error.Try Again Later",
+      status:500
+    }
+
+    res.send(failMessage);
+
+    return;
+
+  }
 
   const rev = {
     name: "sessionID",

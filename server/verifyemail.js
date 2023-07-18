@@ -22,11 +22,38 @@ router.get("/", (req, res) => {
 router.get("/:token", async (req, res) => {
   let query =
     "SELECT * FROM requests_su WHERE token='" + req.params.token + "'";
-  const user = await db.runQuery(query);
+
+  let user;
+  try{
+    user = await db.runQuery(query);
+  }
+  catch(error)
+  {
+    console.log("VERIFYEMAIL: [ERROR: Requests couldn t be accesed]");
+    console.log(error);
+
+    res.send("Internal Server Error");
+
+    return;
+  }
 
   if (user[0]) {
     query = "SELECT MAX(id) AS lastID FROM customers ";
-    let result = await db.runQuery(query);
+
+    let result;
+
+    try{
+      result = await db.runQuery(query);
+    }
+    catch(error)
+    {
+      console.log("VERIFYEMAIL : [ERROR: Table customers could not be accesed]");
+      console.log(error);
+
+      res.send("Internal Server Error");
+
+      return;
+    }
 
     let newID = 0;
 
@@ -56,12 +83,34 @@ router.get("/:token", async (req, res) => {
       user[0].email +
       '")';
 
+    try{
     result = await db.runQuery(insertQuery);
+    }
+    catch(error)
+    {
+      console.log("VERIFYEMAIL : [ERROR: User "+user[0].username+" could not be created]");
+      console.log(error);
+
+      res.send("Internal Server Problem");
+
+      return;
+    }
 
     const deleteQuery =
       "DELETE FROM requests_su WHERE token='" + req.params.token + "'";
 
+    try{
     result = await db.runQuery(deleteQuery);
+    }
+    catch(error)
+    {
+      console.log("VERIFYEMAIL : [ERROR:Reuquest for User "+user[0].username+" could not be deleted]");
+      console.log(error);
+
+      res.sendFile(__dirname + "/responses/emailverification.html");
+
+      return;
+    }
 
     res.sendFile(__dirname + "/responses/emailverification.html");
   } else res.send("Invalid link or link expired");

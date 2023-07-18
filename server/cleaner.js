@@ -30,7 +30,16 @@ setInterval(async () => {
       if (dateDiff(date, result[i].creation) > 2592000000) {
         const deleteQuery =
           'DELETE FROM session WHERE id="' + result[i].id + '"';
-        db.runQuery(deleteQuery);
+
+          try{
+            db.runQuery(deleteQuery);
+             }
+             catch(error){
+               console.log("CLEANER : [ERROR: CLEANER couldn t delete session]")
+               console.log(error);
+               return;
+             }
+
         countSession++;
       }
     }
@@ -56,8 +65,17 @@ setInterval(async () => {
       if (dateDiff(date, date2) > 3600000) {
         const deleteQuery =
           'DELETE FROM requests_su WHERE username="' + result[i].username + '"';
-        db.runQuery(deleteQuery);
-        countRequest++;
+        
+          try{
+         db.runQuery(deleteQuery);
+          }
+          catch(error){
+            console.log("CLEANER : [ERROR: CLEANER couldn t delete request]")
+            console.log(error);
+            return;
+          }
+        
+         countRequest++;
       }
     }
   }
