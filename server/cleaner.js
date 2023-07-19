@@ -101,7 +101,7 @@ setInterval(async () => {
 
       if (dateDiff(date, date2) > 3600000) {
         const deleteQuery =
-          'DELETE FROM requests_r WHERE username="' + result[i].email + '"';
+          'DELETE FROM requests_r WHERE email="' + result[i].email + '"';
         
           try{
          db.runQuery(deleteQuery);
@@ -120,4 +120,5 @@ setInterval(async () => {
   console.log("CLEANER : [" + countSession + " Sessions Deleted]");
   console.log("CLEANER : [" + countValidationRequest + " Validation Requests Deleted]");
   console.log("CLEANER : [" + countRecoveryRequest + " Recovery Requests Deleted]");
+  console.log("");
 }, 3600000);
