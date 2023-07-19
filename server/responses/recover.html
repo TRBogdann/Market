@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recover Account</title>
+    <style>
+
+    .correct{
+        border-color:green;
+    }
+
+    .incorrect{
+        border-color: red;
+    }
+
+
+    #mess1 {
+        color:red;
+    }
+
+    #mess2{
+        color:red;
+    }
+
+    </style>
+  </head>
+  <body>
+    <form id="getPass" style="background-color: aquamarine ; width: 50vw; height: 50vh;">
+     <label for="pass">New Password:</label><br>
+     <input id="pass"  type="password" name="pass"><br>
+     <div id="mess1"></div>
+     <label for="cpass">Confirm New Password:</label><br>
+     <input id="cpass" type="password" name="cpass">
+     <div id="mess2"></div>
+     <br><br>
+     <input type="submit" value="Change Password">
+     <div id="message"></div>
+    </form>
+
+    <script>
+        
+        const form=document.getElementById("getPass");
+        const message=document.getElementById("message");
+        const pass=document.getElementById("pass");
+        const cpass=document.getElementById("cpass");
+        const mess1=document.getElementById("mess1");
+        const mess2=document.getElementById("mess2");
+
+        function checkPass(password)
+        {
+            mess1.innerHTML="";
+
+            if(password === undefined || password === "")return "";
+        
+            if(password.length<8){
+                mess1.innerHTML="Password should be at least 8 characters long";
+                return "incorrect"
+            }
+
+            if(password.length>200){
+                mess1.innerHTML="Password cannot be longer that 200 characters long";
+                return "incorrect"
+            }
+
+            if(password.includes(" "))
+            {
+                mess1.innerHTML="Password cannot contain ' '";
+                return "incorrect"
+            }
+
+            return "correct";
+        }
+
+        function checkCpass(password)
+        {
+            mess2.innerHTML="";
+            
+            if(password === "" || password === undefined)return "";
+            if(pass.value==="" || pass.value === undefined || pass.className === "incorrect")
+            return "";
+
+            if(pass.value !== password)
+            {
+                mess2.innerHTML="Passwords are not matching";
+                return "incorrect";
+            }
+             
+            return "correct";
+        }
+
+        pass.addEventListener("change",(e)=>
+        {   
+            pass.className=checkPass(pass.value);
+            cpass.className=checkCpass(cpass.value); 
+        })
+
+        cpass.addEventListener("change",(e)=>
+        {
+            pass.className=checkPass(pass.value);
+            cpass.className=checkCpass(cpass.value); 
+        })
+        
+
+        function sendRequest(pass , cpass ,token)
+        {
+            const request=new XMLHttpRequest();
+            const form=new FormData();
+
+            form.append("pass",pass);
+            form.append("cpass",cpass);
+
+            const url="http://localhost:9000/recovery/change/"+token;
+            
+            request.open("POST",url);
+
+            request.onload=()=>
+            {
+                message.innerHTML=request.responseText;
+            }
+
+            request.send(form);
+        }
+
+        form.addEventListener("submit",(e)=>
+        {  
+            e.preventDefault();
+
+            message.innerHTML="";
+
+            if(pass.className === "" || pass.className === "incorrect") return;
+            if(cpass.className === "" || cpass.className === "incorrect") return;
+
+            const params= window.location.search;
+            
+            const token=new URLSearchParams(params).get("token");
+
+
+            if(token === undefined || token === null) { 
+                message.innerHTML="No Token, Request cannot be made";
+                return;
+            }
+
+            sendRequest(pass.value,cpass.value,token);
+
+
+        }
+        )
+
+    </script>
+
+  </body>
+</html>
