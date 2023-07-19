@@ -1,4 +1,3 @@
-//Unfinished
 
 const express = require("express");
 const DataBase = require("./utils/database");
